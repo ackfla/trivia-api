@@ -18,6 +18,20 @@ class TriviaTestCase(unittest.TestCase):
         self.database_path = "postgres://{}/{}".format('localhost:5432', self.database_name)
         setup_db(self.app, self.database_path)
 
+        self.new_question = {
+            'question': 'What is 1+1?',
+            'answer': '2!',
+            'difficulty': 1,
+            'category': 1
+        }
+
+        self.invalid_question = {
+            'question': 'What is 1+1?',
+            'anser': '2!',
+            'difficulty': 1,
+            'category': 1
+        }
+
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
@@ -43,6 +57,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True) # Check json response includes success
         self.assertTrue(len(data['categories'])) # Check json response includes categories
 
+
     def test_get_paginated_questions(self):
         """Test endpoint returns paginated questions"""
         res = self.client().get('/questions?page=1')
@@ -53,6 +68,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(len(data['questions'])) # Check json response includes questions
         self.assertTrue(data['total_questions']) # Check json response includes total questions
 
+
     def test_get_404_paginated_questions(self):
         """Test endpoint returns 404 if page contains no questions"""
         res = self.client().get('/questions?page=1000')
@@ -61,6 +77,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404) # Check for 404 response code
         self.assertEqual(data['success'], False) # Check json response includes false success
         self.assertEqual(data['message'], 'resource not found') # Check json response includes correct message
+
 
     def test_delete_question_by_id(self):
         """Test endpoint will delete a question by id"""
@@ -73,6 +90,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['deleted'], 2) # Check json response includes id of deleted question
         self.assertEqual(question, None) # Check question has been deleted
 
+
     def test_delete_question_by_non_exisiting_id(self):
         """Test endpoint will return not found for deleting a question by non existing id"""
         res = self.client().delete('/questions/2000')
@@ -81,6 +99,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404) # Check for 404 response code
         self.assertEqual(data['success'], False) # Check json response includes false success
         self.assertEqual(data['message'], 'resource not found') # Check json response includes correct message
+
 
     def test_get_questions_by_category_id(self):
         """Test endpoint will return questions belonging to a specific category"""
@@ -93,6 +112,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['total_questions']) # Check json response includes total questions
         self.assertEqual(data['current_category'], 2) # Check json response includes correct category id
 
+
     def test_get_questions_by_invalid_category_id(self):
         """Test endpoint will return not found if invalid category id used"""
         res = self.client().get('/categories/2000/questions')
@@ -101,6 +121,27 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404) # Check for 404 response code
         self.assertEqual(data['success'], False) # Check json response includes false success
         self.assertEqual(data['message'], 'resource not found') # Check json response includes correct message
+
+
+    def test_add_new_question(self):
+        """Test endpoint will add new question"""
+        res = self.client().post('/questions', json=self.new_question)
+        data = json.loads(res.data)
+        question = Question.query.filter(Question.id == data['created']).one_or_none()
+
+        self.assertEqual(res.status_code, 200) # Check for 200 response code
+        self.assertEqual(data['success'], True) # Check json response includes success
+        self.assertTrue(question != None) # Check question has been created
+
+
+    def test_405_if_question_creation_not_allowed(self):
+        """Test endpoint will return 405 if invalid endpoint for new question used"""
+        res = self.client().post('/questions/24', json=self.new_question)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 405) # Check for 405 response code
+        self.assertEqual(data['success'], False) # Check json response includes false success
+        self.assertEqual(data['message'], 'method not allowed') # Check json response includes correct message
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
