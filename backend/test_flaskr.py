@@ -32,6 +32,26 @@ class TriviaTestCase(unittest.TestCase):
             'category': 1
         }
 
+        self.previous_questions = {
+            'previous_questions': [
+                {
+                    "answer": "Escher",
+                    "category": 2,
+                    "difficulty": 1,
+                    "id": 16,
+                    "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+                },
+                {
+                    "answer": "Mona Lisa",
+                    "category": 2,
+                    "difficulty": 3,
+                    "id": 17,
+                    "question": "La Giaconda is better known as what?"
+                }
+            ],
+            'quiz_category': 2
+        }
+
         # binds the app to the current context
         with self.app.app_context():
             self.db = SQLAlchemy()
@@ -142,6 +162,17 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 405) # Check for 405 response code
         self.assertEqual(data['success'], False) # Check json response includes false success
         self.assertEqual(data['message'], 'method not allowed') # Check json response includes correct message
+
+
+    def test_get_random_question(self):
+        """Test endpoint returns random question"""
+        res = self.client().post('/quizzes', json=self.previous_questions)
+        data = json.loads(res.data)
+        id = data['question']['id']
+
+        self.assertEqual(res.status_code, 200) # Check for 200 response code
+        self.assertEqual(data['success'], True) # Check json response includes success
+        self.assertTrue(id == 18 or id == 19) # Check json response returns one of correct questions
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
