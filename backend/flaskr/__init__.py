@@ -36,11 +36,13 @@ def create_app(test_config=None):
   def get_all_categories():
 
       categories = Category.query.order_by(Category.id).all()
-      formattedCategories = [category.format() for category in categories]
+      formatted_categories = {category.id: category.type for category in categories}
+
+      print(formatted_categories)
 
       return jsonify({
         'success': True,
-        'categories': formattedCategories
+        'categories': formatted_categories
       })
 
   '''
@@ -64,7 +66,7 @@ def create_app(test_config=None):
 
       # Fetch all categories from db
       categories = Category.query.order_by(Category.id).all()
-      formattedCategories = [category.format() for category in categories]
+      formattedCategories = {category.id: category.type for category in categories}
 
       # Get page from request args object (1 as default)
       page = request.args.get('page', 1, type=int)
@@ -82,7 +84,7 @@ def create_app(test_config=None):
         'questions': current_questions,
         'total_questions': len(Question.query.all()),
         'categories': formattedCategories,
-        'current_category': 2
+        'current_category': 1
       })
 
 
