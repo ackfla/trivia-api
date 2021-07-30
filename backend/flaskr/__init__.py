@@ -49,6 +49,36 @@ def create_app(test_config=None):
   ten questions per page and pagination at the bottom of the screen for three pages.
   Clicking on the page numbers should update the questions.
   '''
+  @app.route('/questions')
+  def get_all_questions():
+
+      # Fetch all questions from db
+      questions = Question.query.order_by(Question.id).all()
+      formatted_questions = [question.format() for question in questions]
+
+      # Fetch all categories from db
+      categories = Category.query.order_by(Category.id).all()
+      formattedCategories = [category.format() for category in categories]
+
+      # Get page from request args object (1 as default)
+      page = request.args.get('page', 1, type=int)
+
+      start = (page - 1) * QUESTIONS_PER_PAGE
+      end = start + QUESTIONS_PER_PAGE
+      current_questions = formatted_questions[start:end]
+
+      # 404 if no questions
+      if len(current_questions) == 0:
+          abort(404)
+
+      return jsonify({
+        'success': True,
+        'questions': current_questions,
+        'total_questions': len(Question.query.all()),
+        'categories': formattedCategories,
+        'current_category': 2
+      })
+
 
   '''
   @TODO:
@@ -57,6 +87,23 @@ def create_app(test_config=None):
   TEST: When you click the trash icon next to a question, the question will be removed.
   This removal will persist in the database and when you refresh the page.
   '''
+  @app.route('/questions/<int:question_id>', methods=['DELETE'])
+  def delete_question(question_id):
+      
+    # Fetch question from db based on query parameter
+    question = Question.query.filter(Question.id == question_id).one_or_none()
+
+    # If no question found, return not found
+    if question is None:
+      abort(404)
+
+    # Delete question
+    question.delete()
+
+    return jsonify({
+      'success': True,
+      'deleted': question_id,
+    })
 
   '''
   @TODO:
