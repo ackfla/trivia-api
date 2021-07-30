@@ -95,7 +95,7 @@ def create_app(test_config=None):
   '''
   @app.route('/questions/<int:question_id>', methods=['DELETE'])
   def delete_question(question_id):
-      
+
     # Fetch question from db based on query parameter
     question = Question.query.filter(Question.id == question_id).one_or_none()
 
@@ -141,7 +141,27 @@ def create_app(test_config=None):
   categories in the left column will cause only questions of that
   category to be shown.
   '''
+  @app.route('/categories/<int:category_id>/questions')
+  def get_questions_by_category_id(category_id):
 
+    # Fetch category from db based on query parameter
+    category = Category.query.filter(Category.id == category_id).one_or_none()
+
+    # If no category found, return not found
+    if category is None:
+      abort(404)
+
+    # Fetch questions from db filtered by category name
+    questions = Question.query.filter(Question.category == category_id).all()
+
+    formatted_questions = [question.format() for question in questions]
+
+    return jsonify({
+      'success': True,
+      'questions': formatted_questions,
+      'total_questions': len(questions),
+      'current_category': category_id
+    })
 
   '''
   @TODO:

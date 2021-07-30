@@ -82,6 +82,25 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False) # Check json response includes false success
         self.assertEqual(data['message'], 'resource not found') # Check json response includes correct message
 
+    def test_get_questions_by_category_id(self):
+        """Test endpoint will return questions belonging to a specific category"""
+        res = self.client().get('/categories/2/questions')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200) # Check for 200 response code
+        self.assertEqual(data['success'], True) # Check json response includes success
+        self.assertTrue(data['questions']) # Check json response includes questions
+        self.assertTrue(data['total_questions']) # Check json response includes total questions
+        self.assertEqual(data['current_category'], 2) # Check json response includes correct category id
+
+    def test_get_questions_by_invalid_category_id(self):
+        """Test endpoint will return not found if invalid category id used"""
+        res = self.client().get('/categories/2000/questions')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404) # Check for 404 response code
+        self.assertEqual(data['success'], False) # Check json response includes false success
+        self.assertEqual(data['message'], 'resource not found') # Check json response includes correct message
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
