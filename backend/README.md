@@ -102,12 +102,12 @@ GET '/api/v1.0/categories'
 
 ## Endpoints
 
-GET `/questions`
-GET `/categories`
-GET `/categories/<category_id>/questions`
-DELETE `/questions/<question_id>`
-POST `/questions`
-POST `/quizzes`
+- GET `/questions`
+- GET `/categories`
+- GET `/categories/<category_id>/questions`
+- DELETE `/questions/<question_id>`
+- POST `/questions`
+- POST `/quizzes`
 
 ---
 
@@ -123,12 +123,14 @@ Get a paged list of all questions
 | ----------- | ----------- | ----------- |
 | page      | int       | Page number to return (up to 10 questions per page)      |
 
-#### Request body
+#### Request arguments
 An example of the request structure.
 ```
 ?page=2
 ```
 
+#### Request body
+n/a
 
 #### Response
 This is an example of the response JSON. Results will vary depending on your data.
@@ -173,6 +175,15 @@ Get a list of all categories
 #### Endpoint URL
 `GET http://localhost:5000/categories`
 
+#### Parameters
+n/a
+
+#### Request arguments
+n/a
+
+#### Request body
+n/a
+
 #### Response
 This is an example of the response JSON. Results will vary depending on your data.
 
@@ -196,6 +207,15 @@ Get a paged list of questions filtered by category
 
 #### Endpoint URL
 `GET http://localhost:5000/categories/<category_id>/questions`
+
+#### Parameters
+n/a
+
+#### Request arguments
+n/a
+
+#### Request body
+n/a
 
 #### Response
 This is an example of the response JSON. Results will vary depending on your data.
@@ -238,6 +258,15 @@ Delete a question by id
 #### Endpoint URL
 `GET http://localhost:5000/questions/<question_id>`
 
+#### Parameters
+n/a
+
+#### Request arguments
+n/a
+
+#### Request body
+n/a
+
 #### Response
 This is an example of the response JSON. Results will vary depending on your data.
 
@@ -257,13 +286,10 @@ Add a new question
 `POST http://localhost:5000/questions`
 
 #### Parameters
+n/a
 
-| Name      | Type | Description |
-| ----------- | ----------- | ----------- |
-| question      | string       | Question text      |
-| answer      | string       | Answer text      |
-| difficulty      | int       | Question difficulty     |
-| category      | int       | Category id     |
+#### Request arguments
+n/a
 
 #### Request body
 An example of the request structure.
@@ -296,15 +322,16 @@ Get questions based on a search term. It will return any questions for whom the 
 `POST http://localhost:5000/questions`
 
 #### Parameters
+n/a
 
-| Name      | Type | Description |
-| ----------- | ----------- | ----------- |
-| searchTerm      | string       | Search term      |
+#### Request arguments
+n/a
 
 #### Request body
-An example of the request structure.
 ```
-?searchTerm=title
+{
+  "searchTerm": "title"
+}
 ```
 
 #### Response
@@ -327,11 +354,10 @@ Get questions to play the quiz. Returns a random questions within the given cate
 `POST http://localhost:5000/quizzes`
 
 #### Parameters
+n/a
 
-| Name      | Type | Description |
-| ----------- | ----------- | ----------- |
-| quiz_category      | int       | Category id      |
-| previous_questions      | string       | Previously answered questions      |
+#### Request body
+n/a
 
 #### Request body
 An example of the request structure.
@@ -375,7 +401,6 @@ This is an example of the response JSON. Results will vary depending on your dat
   "success": true
 }
 ```
-
 
 ## Testing
 To run the tests, run
