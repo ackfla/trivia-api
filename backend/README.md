@@ -75,31 +75,6 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 9. Create error handlers for all expected errors including 400, 404, 422 and 500.
 
-
-
-## Review Comment to the Students
-```
-This README is missing documentation of your endpoints. Below is an example for your endpoint to get all categories. Please use it as a reference for creating your documentation and resubmit your code.
-
-Endpoints
-GET '/api/v1.0/categories'
-GET ...
-POST ...
-DELETE ...
-
-GET '/api/v1.0/categories'
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, categories, that contains a object of id: category_string key:value pairs.
-{'1' : "Science",
-'2' : "Art",
-'3' : "Geography",
-'4' : "History",
-'5' : "Entertainment",
-'6' : "Sports"}
-
-```
-
 ## Endpoints
 
 - GET `/questions`
@@ -315,7 +290,13 @@ n/a
 n/a
 
 #### Request body
-An example of the request structure.
+An object with keys:
+- **"question"** contains `question<string>`
+- **"answer"** contains `answer<string>`
+- **"difficulty"** contains `difficulty_level<int>`
+- **"category"** contains `category_id<int>`
+
+This is an example of the request structure.
 ```
 {
   "question": "What is 1+1?",
@@ -357,6 +338,11 @@ n/a
 n/a
 
 #### Request body
+An object with key:
+- **"searchTerm"** contains `search_term<string>`
+
+This is an example of the request structure.
+
 ```
 {
   "searchTerm": "title"
@@ -412,7 +398,11 @@ n/a
 n/a
 
 #### Request body
-An example of the request structure.
+An object with keys:
+- **"previous_questions"** a list containing `question_id<int>`
+- **"quiz_category"** contains an object of `type`: `type<string>`,`id`: `category_id<int>`  *key:value* pairs
+
+This is an example of the request structure.
 ```
 {
   "previous_questions": [15, 16],
@@ -433,7 +423,7 @@ This is an example of the response JSON. Results will vary depending on your dat
 ```
 {
   "question": {
-      "answer": "Blood", 
+      "answer": "Blood",
       "category": 1,
       "difficulty": 4,
       "id": 22,
