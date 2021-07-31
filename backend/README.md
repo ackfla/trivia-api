@@ -133,6 +133,14 @@ An example of the request structure.
 n/a
 
 #### Response
+Returns: An object with keys:  
+- **"categories"** contains an object of `category_id`: `category<string>` *key:value* pairs
+- **"current_category"** contains `category_id<int>`
+- **"questions"** a list that contains objects
+  -  containing `answer`:`answer<string>`, `category`: `category_id<int>`,  `difficulty`: `difficulty_level<int>`, `id`:`question_id<int>`, `question`:`question<string>` *key:value* pairs
+- **"success"** contains the boolean value `true`
+- **"total_questions"** contain an integer value
+
 This is an example of the response JSON. Results will vary depending on your data.
 
 ```
@@ -185,6 +193,10 @@ n/a
 n/a
 
 #### Response
+Returns: An object with keys:  
+- **"categories"** contains an object of `category_id`: `category<string>` *key:value* pairs
+- **"success"** contains the boolean value `true`
+
 This is an example of the response JSON. Results will vary depending on your data.
 
 ```
@@ -218,6 +230,13 @@ n/a
 n/a
 
 #### Response
+Returns: An object with keys:
+- **"current_category"** contains `category_id<int>`
+- **"questions"** a list that contains objects
+  -  containing `answer`:`answer<string>`, `category`: `category_id<int>`,  `difficulty`: `difficulty_level<int>`, `id`:`question_id<int>`, `question`:`question<string>` *key:value* pairs
+- **"success"** contains the boolean value `true`
+- **"total_questions"** contain an integer value
+
 This is an example of the response JSON. Results will vary depending on your data.
 ```
 {
@@ -268,6 +287,10 @@ n/a
 n/a
 
 #### Response
+Returns: An object with keys:
+- **"success"** contains the boolean value `true`
+- **"deleted"** contains the `question_id<int>` deleted
+
 This is an example of the response JSON. Results will vary depending on your data.
 
 ```
@@ -303,6 +326,12 @@ An example of the request structure.
 ```
 
 #### Response
+
+Returns: An object with keys:
+- **"success"** contains the boolean value `true`
+- **"created"** contains the `question_id<int>` created
+- **"total_questions"** contain an integer value
+
 This is an example of the response JSON. Results will vary depending on your data.
 
 ```
@@ -335,13 +364,36 @@ n/a
 ```
 
 #### Response
+Returns: An object with keys:
+- **"current_category"** contains `category_id<int>`
+- **"questions"** a list that contains objects
+  -  containing `answer`:`answer<string>`, `category`: `category_id<int>`,  `difficulty`: `difficulty_level<int>`, `id`:`question_id<int>`, `question`:`question<string>` *key:value* pairs
+- **"success"** contains the boolean value `true`
+- **"total_questions"** contain an integer value
+
 This is an example of the response JSON. Results will vary depending on your data.
 
 ```
 {
-  "success": true,
-  "created": 19
-  "total_questions": 18
+  "current_category": 1,
+  "questions": [
+      {
+          "answer": "Maya Angelou",
+          "category": 4,
+          "difficulty": 2,
+          "id": 5,
+          "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?"
+      },
+      {
+          "answer": "Edward Scissorhands",
+          "category": 5,
+          "difficulty": 3,
+          "id": 6,
+          "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?"
+      }
+    ],
+    "success": true,
+    "total_questions": 2
 }
 ```
 
@@ -363,22 +415,7 @@ n/a
 An example of the request structure.
 ```
 {
-  "previous_questions": [
-    {
-      "answer": "Agra",
-      "category": 3,
-      "difficulty": 2,
-      "id": 15,
-      "question": "The Taj Mahal is located in which Indian city?"
-    },
-    {
-      "answer": "Escher",
-      "category": 2,
-      "difficulty": 1,
-      "id": 16,
-      "question": "Which Dutch graphic artist – initials M C was a creator of optical illusions?"
-    }
-  ],
+  "previous_questions": [15, 16],
   "quiz_category": {
     "type": "Science",
     "id": "1"
@@ -387,12 +424,16 @@ An example of the request structure.
 ```
 
 #### Response
+Returns: An object with keys:
+- **"question"** an object containing `answer`:`answer<string>`, `category`: `category_id<int>`,  `difficulty`: `difficulty_level<int>`, `id`:`question_id<int>`, `question`:`question<string>` *key:value* pairs
+- **"success"** contains the boolean value `true`
+
 This is an example of the response JSON. Results will vary depending on your data.
 
 ```
 {
   "question": {
-      "answer": "Blood",
+      "answer": "Blood", 
       "category": 1,
       "difficulty": 4,
       "id": 22,
