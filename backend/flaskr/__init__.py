@@ -122,34 +122,49 @@ def create_app(test_config=None):
   of the questions list in the "List" tab.
   '''
   @app.route('/questions', methods=['POST'])
-  def add_new_question():
+  def add_new_question_or_search():
 
     # Get JSON body
     body = request.get_json()
-    # Get new question data
+    # Get new question / search data
     new_question = body.get('question', None)
     new_answer = body.get('answer', None)
     new_difficulty = body.get('difficulty', None)
     new_category = body.get('category', None)
+    search = body.get('searchTerm', None)
 
-    try:
-      # Add new question to db
-      question = Question(
-        question=new_question,
-        answer=new_answer,
-        difficulty=new_difficulty,
-        category=new_category
-      )
-      question.insert()
+    # Check for search term
+    if search != None:
+        print(search)
+        questions = Question.query.order_by(Question.id).filter(Question.question.ilike('%{}%'.format(search)))
+        formattedQuestions = [question.format() for question in questions]
+        return jsonify({
+          'success': True,
+          'questions': formattedQuestions,
+          'total_questions': len(questions.all()),
+          'current_category': 1
+        })
 
-      return jsonify({
-        'success': True,
-        'created': question.id,
-        'total_questions': len(Question.query.all())
-      })
+    # Add new question
+    else:
+        try:
+          # Add new question to db
+          question = Question(
+            question=new_question,
+            answer=new_answer,
+            difficulty=new_difficulty,
+            category=new_category
+          )
+          question.insert()
 
-    except:
-      abort(422)
+          return jsonify({
+            'success': True,
+            'created': question.id,
+            'total_questions': len(Question.query.all())
+          })
+
+        except:
+          abort(422)
 
   '''
   @TODO:

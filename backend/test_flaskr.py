@@ -164,6 +164,19 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'method not allowed') # Check json response includes correct message
 
 
+    def test_get_questions_by_seach_term(self):
+        """Create a POST endpoint to get questions based on a search term.
+        It should return any questions for whom the search term
+        is a substring of the question."""
+        res = self.client().post('/questions', json={'searchTerm':'title'})
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200) # Check for 200 response code
+        self.assertEqual(data['success'], True) # Check json response includes success
+        self.assertTrue(data['questions']) # Check json response returns questions
+        self.assertTrue(data['total_questions']) # Check json response returns total questions
+
+
     def test_get_random_question(self):
         """Test endpoint returns random question"""
         res = self.client().post('/quizzes', json=self.previous_questions)
