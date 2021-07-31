@@ -223,17 +223,27 @@ def create_app(test_config=None):
       # Get JSON body
       body = request.get_json()
 
-      # Filter all questions by quiz category
-      questions = Question.query.filter(Question.category == body['quiz_category']['id'])
+      # Get all quiz questions
+      questions = Question.query
+
+      if body['quiz_category']['id']:
+          # Filter all questions by quiz category
+          questions = questions.filter(Question.category == body['quiz_category']['id'])
 
       if body['previous_questions']:
           # Filter again to remove previous questions
           questions = questions.filter(Question.id.notin_(body['previous_questions'])).all()
 
-      # Format questions
-      formattedQuestions = [question.format() for question in questions]
-      # Pick a random one
-      question = random.choice(formattedQuestions)
+      # Check if any questions remaining
+      if questions:
+          # Format questions
+          formattedQuestions = [question.format() for question in questions]
+          # Pick a random one
+          question = random.choice(formattedQuestions)
+
+      # No questions are left
+      else:
+          question = False
 
       return jsonify({
         'success': True,
