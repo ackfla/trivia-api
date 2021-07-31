@@ -33,23 +33,11 @@ class TriviaTestCase(unittest.TestCase):
         }
 
         self.previous_questions = {
-            'previous_questions': [
-                {
-                    "answer": "Escher",
-                    "category": 2,
-                    "difficulty": 1,
-                    "id": 16,
-                    "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
-                },
-                {
-                    "answer": "Mona Lisa",
-                    "category": 2,
-                    "difficulty": 3,
-                    "id": 17,
-                    "question": "La Giaconda is better known as what?"
-                }
-            ],
-            'quiz_category': 2
+            'previous_questions': [16, 17],
+            'quiz_category': {
+                'type': 'Art',
+                'id': 2
+            }
         }
 
         # binds the app to the current context
@@ -181,6 +169,7 @@ class TriviaTestCase(unittest.TestCase):
         """Test endpoint returns random question"""
         res = self.client().post('/quizzes', json=self.previous_questions)
         data = json.loads(res.data)
+        print(data['question'])
         id = data['question']['id']
 
         self.assertEqual(res.status_code, 200) # Check for 200 response code

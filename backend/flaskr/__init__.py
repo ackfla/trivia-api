@@ -222,13 +222,14 @@ def create_app(test_config=None):
   def get_quiz_question():
       # Get JSON body
       body = request.get_json()
-      # Put ids of previous question in a list
-      ids = [question['id'] for question in body['previous_questions']]
 
       # Filter all questions by quiz category
-      questions = Question.query.filter(Question.category == body['quiz_category'])
-      # Filter again to remove previous questions
-      questions = questions.filter(Question.id.notin_(ids)).all()
+      questions = Question.query.filter(Question.category == body['quiz_category']['id'])
+
+      if body['previous_questions']:
+          # Filter again to remove previous questions
+          questions = questions.filter(Question.id.notin_(body['previous_questions'])).all()
+
       # Format questions
       formattedQuestions = [question.format() for question in questions]
       # Pick a random one
