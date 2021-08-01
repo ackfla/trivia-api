@@ -10,18 +10,17 @@ QUESTIONS_PER_PAGE = 10
 
 
 def create_app(test_config=None):
+    '''
+  App config
+  '''
     # create and configure the app
     app = Flask(__name__)
     setup_db(app)
 
-    '''
-  Setup CORS. Allow '*' for origins.
-  '''
+    # Setup CORS. Allow '*' for origins.
     cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
-    '''
-  Use the after_request decorator to set Access-Control-Allow
-  '''
+    # Use the after_request decorator to set Access-Control-Allow
     @app.after_request
     def after_request(response):
         response.headers.add(

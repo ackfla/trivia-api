@@ -1,0 +1,4 @@
+DATABASE_NAME = "trivia"
+
+SQLALCHEMY_DATABASE_URI = "postgres://{}/{}".format('localhost:5432', DATABASE_NAME)
+SQLALCHEMY_TRACK_MODIFICATIONS = False
