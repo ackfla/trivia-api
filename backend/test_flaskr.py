@@ -14,10 +14,9 @@ class TriviaTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "trivia_test"
-        self.database_path = "postgres://{}/{}".format(
-            'localhost:5432', self.database_name)
-        setup_db(self.app, self.database_path)
+        os.environ['DATABASE_PATH'] = "postgres://{}/{}".format(
+            'localhost:5432', 'trivia_test')
+        setup_db(self.app)
 
         self.new_question = {
             'question': 'What is 1+1?',
@@ -35,6 +34,14 @@ class TriviaTestCase(unittest.TestCase):
 
         self.previous_questions = {
             'previous_questions': [16, 17],
+            'quiz_category': {
+                'type': 'Art',
+                'id': 2
+            }
+        }
+
+        self.previous_questions_all = {
+            'previous_questions': [16, 17, 18, 19],
             'quiz_category': {
                 'type': 'Art',
                 'id': 2
@@ -185,7 +192,6 @@ class TriviaTestCase(unittest.TestCase):
         """Test endpoint returns random question"""
         res = self.client().post('/quizzes', json=self.previous_questions)
         data = json.loads(res.data)
-        print(data['question'])
         id = data['question']['id']
 
         self.assertEqual(res.status_code, 200)  # Check for 200 response code
@@ -193,6 +199,17 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], True)
         # Check json response returns one of correct questions
         self.assertTrue(id == 18 or id == 19)
+
+    def test_no_remaining_questions(self):
+        """Test endpoint returns False if no questions remaining"""
+        res = self.client().post('/quizzes', json=self.previous_questions_all)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)  # Check for 200 response code
+        # Check json response includes success
+        self.assertEqual(data['success'], True)
+        # Check json response returns False as no remaining questions left
+        self.assertEqual(data['question'], False)
 
 
 # Make the tests conveniently executable

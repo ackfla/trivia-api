@@ -14,12 +14,10 @@ setup_db(app)
 
 
 def setup_db(app):
-    # Get db path from os env
-    db_path = os.getenv(
+    # Set app config
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
         'DATABASE_PATH',
         default="postgres://localhost:5432/trivia")
-    # Set app config
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
     db.init_app(app)
